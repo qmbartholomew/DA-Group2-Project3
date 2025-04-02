@@ -1,17 +1,16 @@
 <div class="chart-container">
     <div class="controls">
       <label for="graphSelect">Select Graph:</label>
-      <select id="graphSelect">
-        <!-- Options will be added here -->
-         <option default>EUR/USD</option>
-         <option>JPY/USD</option>
-         <option>CAD/USD</option>
+      <select id="graphSelect" [(ngModel)]="selectedPair">
+        <option value="" disabled selected>Select a pair</option>
+        <option *ngFor="let pair of currencyPairs" [value]="pair">
+          {{ pair }}
+        </option>
       </select>
     </div>
   
     <div class="graph-area">
-      <!-- Chart will be rendered here -->
-       I'm a chart
+      {{ displayText }}
     </div>
   </div>
   
