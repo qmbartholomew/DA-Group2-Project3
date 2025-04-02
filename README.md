@@ -26,7 +26,7 @@
 - Justin Wright
     - https://github.com/j-wright
 - Megan Iyer
-    - https://github.com/lclopez4
+    - https://github.com/BookHaven12
 - Morgan Pfunder
     - https://github.com/mopfun
 - Quentin Bartholomew
