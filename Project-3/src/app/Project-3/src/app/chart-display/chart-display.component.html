@@ -1,0 +1,16 @@
+<div class="chart-container">
+    <div class="controls">
+      <label for="graphSelect">Select Graph:</label>
+      <select id="graphSelect" [(ngModel)]="selectedPair">
+        <option value="" disabled selected>Select a pair</option>
+        <option *ngFor="let pair of currencyPairs" [value]="pair">
+          {{ pair }}
+        </option>
+      </select>
+    </div>
+  
+    <div class="graph-area">
+      {{ displayText }}
+    </div>
+  </div>
+  
