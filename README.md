@@ -8,11 +8,15 @@
 
 ### Prerequisites
  - [Node.js/Npm](https://nodejs.org/)
+ - AngularCLI (Step 2 of instructions)
 
 1. Clone the repository to your local machine.
-2. Install dependencies using `npm i` command.
-3. Run the application using the `ng serve` command.
-4. Open any browser to this link: http://localhost:4200/
+2. Install Angular CLI using `npm i @angular/cli`.
+3. Install dependencies using `npm i` command.
+4. Open a terminal to DA-Group2-Project3\Project-3\Backend and run the command `pip install Flask pandas`
+5. Run the backend by using the `python app.py` command.
+6. Open a separate terminal to Project-3\Frontend\Project-3\src\app and run the application using the `ng serve` command.
+7. Open any browser to this link: http://localhost:4200/
 
 ## Data Sources
 

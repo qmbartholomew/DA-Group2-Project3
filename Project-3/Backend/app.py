@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
-
+CORS(app)
 def get_db_connection():
     conn = sqlite3.connect('test.sqlite')
     conn.row_factory = sqlite3.Row
