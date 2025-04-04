@@ -1,4 +1,4 @@
-function calculateMA(data, period) {  //period = 5,8 or 13 days
+calculateMA(data, period) {  //period = 5,8 or 13 days
     let ma = [];                       //ma is short for moving average
     for (let i = 0; i < data.length; i++) {
       if (i < period - 1) {
@@ -12,7 +12,7 @@ function calculateMA(data, period) {  //period = 5,8 or 13 days
     return ma;
   }
   
-  function plotChart(pair) {
+  plotChart(pair) {
     fetch(`/data/${pair}`) // uses JS Fetch API to send a get request to Flask 
       .then(response => response.json())
       .then(data => {
