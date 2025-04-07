@@ -544,7 +544,7 @@ let traces = [
   {
     x: dates,
     y: prices,
-    name: 'EUR/USD Price',
+    name: 'EURO/USD Price',
     mode: 'lines+markers',
     line: { color: 'black' }
   },
