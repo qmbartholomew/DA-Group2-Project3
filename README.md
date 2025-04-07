@@ -28,5 +28,6 @@
 - Megan Iyer
     - https://github.com/lclopez4
 - Morgan Pfunder
+    - https://github.com/mopfun
 - Quentin Bartholomew
     - https://github.com/qmbartholomew
