@@ -35,7 +35,6 @@ export class ChartDisplayComponent {
       this.displayText = 'Please select a currency pair to view the chart.';
     }
   }
-
   fetchAndRenderChart(pair: string): void {
     this.http.get<any[]>(`http://localhost:5000/${pair}`).subscribe({
       next: (list) => {
