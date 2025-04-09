@@ -633,11 +633,26 @@ const bearishReturns = [-0.7, 1.5, -0.3];     // % from short to cover
 
 // Calculate averages
 const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
+// let avgBullish;
+// if (bullishReturns.length > 0) {
+//   avgBullish = avg(bullishReturns).toFixed(2);
+// } else {
+//   avgBullish = 0;
+// }
+
+// let avgBearish;
+// if (bearishReturns.length > 0) {
+//   avgBearish = avg(bearishReturns).toFixed(2);
+// } else {
+//   avgBearish = 0;
+// }
+
 const avgBullish = bullishReturns.length ? avg(bullishReturns).toFixed(2) : 0;
 const avgBearish = bearishReturns.length ? avg(bearishReturns).toFixed(2) : 0;
 
 // Win/Loss classification
-const allReturns = [...bullishReturns, ...bearishReturns];
+const allReturns = bullishReturns.concat(bearishReturns);
 const wins = allReturns.filter(r => r > 0).length;
 const losses = allReturns.filter(r => r <= 0).length;
 
