@@ -539,29 +539,29 @@ let list = [
   let ma8 = calculateMA(data, 8);
   let ma13 = calculateMA(data, 13);
   
-  // Lists for crossover points
-  let buyDates = [];
-  let buyPrices = [];
-  let sellDates = [];
-  let sellPrices = [];
+  // // Lists for crossover points
+  // let buyDates = [];
+  // let buyPrices = [];
+  // let sellDates = [];
+  // let sellPrices = [];
 
-  for (let i = 1; i < prices.length; i++) {
-    if (ma5[i] && ma8[i] && ma13[i]) {
-    const isBullishNow = ma5[i] > ma8[i] && ma8[i] > ma13[i];
-    const wasBullishBefore = ma5[i - 1] > ma8[i - 1] && ma8[i - 1] > ma13[i - 1];
+  // for (let i = 1; i < prices.length; i++) {
+  //   if (ma5[i] && ma8[i] && ma13[i]) {
+  //   const isBullishNow = ma5[i] > ma8[i] && ma8[i] > ma13[i];
+  //   const wasBullishBefore = ma5[i - 1] > ma8[i - 1] && ma8[i - 1] > ma13[i - 1];
 
-    const isBearishNow = ma5[i] < ma8[i] && ma8[i] < ma13[i];
-    const wasBearishBefore = ma5[i - 1] < ma8[i - 1] && ma8[i - 1] < ma13[i - 1];
+  //   const isBearishNow = ma5[i] < ma8[i] && ma8[i] < ma13[i];
+  //   const wasBearishBefore = ma5[i - 1] < ma8[i - 1] && ma8[i - 1] < ma13[i - 1];
 
-      if (isBullishNow && !wasBullishBefore) {
-      buyDates.push(dates[i]);
-      buyPrices.push(prices[i]);
-      } else if (isBearishNow && !wasBearishBefore) {
-      sellDates.push(dates[i]);
-      sellPrices.push(prices[i]);
-      }
-    }
-  }
+  //     if (isBullishNow && !wasBullishBefore) {
+  //     buyDates.push(dates[i]);
+  //     buyPrices.push(prices[i]);
+  //     } else if (isBearishNow && !wasBearishBefore) {
+  //     sellDates.push(dates[i]);
+  //     sellPrices.push(prices[i]);
+  //     }
+  //   }
+  // }
 
 
   // Plotly chart setup
@@ -596,27 +596,27 @@ let list = [
     }  
   ];
 
-//Pushes buy and sell triangle markers to the line chart
-  traces.push(
-    {
-      x: buyDates,
-      y: buyPrices,
-      name: 'BUY Signal',
-      mode: 'markers+text',
-      marker: { color: 'green', size: 10, symbol: 'triangle-up' },
-      text: Array(buyDates.length).fill('BUY'),
-      textposition: 'top center'
-    },
-    {
-      x: sellDates,
-      y: sellPrices,
-      name: 'SELL Signal',
-      mode: 'markers+text',
-      marker: { color: 'red', size: 10, symbol: 'triangle-down' },
-      text: Array(sellDates.length).fill('SELL'),
-      textposition: 'bottom center'
-    }
-  );
+// //Pushes buy and sell triangle markers to the line chart
+//   traces.push(
+//     {
+//       x: buyDates,
+//       y: buyPrices,
+//       name: 'BUY Signal',
+//       mode: 'markers+text',
+//       marker: { color: 'green', size: 10, symbol: 'triangle-up' },
+//       text: Array(buyDates.length).fill('BUY'),
+//       textposition: 'top center'
+//     },
+//     {
+//       x: sellDates,
+//       y: sellPrices,
+//       name: 'SELL Signal',
+//       mode: 'markers+text',
+//       marker: { color: 'red', size: 10, symbol: 'triangle-down' },
+//       text: Array(sellDates.length).fill('SELL'),
+//       textposition: 'bottom center'
+//     }
+//   );
   
   let layout = {
     title: 'EUR/USD with 5-8-13 Moving Averages',
@@ -657,7 +657,7 @@ const allReturns = bullishReturns.concat(bearishReturns);
 const wins = allReturns.filter(r => r > 0).length;
 const losses = allReturns.filter(r => r <= 0).length;
 
-// 📊 Bar Chart 1: Avg Return After Crossovers
+// Bar Chart 1: Avg Return After Crossovers
 Plotly.newPlot('avgReturnChart', [{
   x: ['Bullish Crossover', 'Bearish Crossover'],
   y: [avgBullish, avgBearish],
@@ -668,7 +668,7 @@ Plotly.newPlot('avgReturnChart', [{
   yaxis: { title: 'Return (%)' }
 });
 
-// 📊 Bar Chart 2: Win vs. Loss Count
+// Bar Chart 2: Win vs. Loss Count
 Plotly.newPlot('winLossChart', [{
   x: ['Winning Trades', 'Losing Trades'],
   y: [wins, losses],
