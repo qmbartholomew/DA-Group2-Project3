@@ -626,7 +626,8 @@ let list = [
   
   // Render chart
   Plotly.newPlot('chart', traces, layout);
-  
+
+  /// BAR CHART CODE
   // Dummy buy/sell signals with calculated returns already
 const bullishReturns = [1.2, 0.8, -0.5, 2.1]; // % change from buy to sell
 const bearishReturns = [-0.7, 1.5, -0.3];     // % from short to cover
