@@ -619,7 +619,7 @@ let list = [
 //   );
   
   let layout = {
-    title: 'EUR/USD with 5-8-13 Moving Averages',
+  title: 'EUR/USD with 5-8-13 Moving Averages',
     xaxis: { title: 'Date' },
     yaxis: { title: 'Price' }
   };
@@ -628,12 +628,47 @@ let list = [
   Plotly.newPlot('chart', traces, layout);
 
   /// BAR CHART CODE
-  // Dummy buy/sell signals with calculated returns already
-const bullishReturns = [1.2, 0.8, -0.5, 2.1]; // % change from buy to sell
-const bearishReturns = [-0.7, 1.5, -0.3];     // % from short to cover
+  // FAKE DATA!!!!!!!
+let profitsData = [0, 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, -0.5, 0, 0,4,12,8,3,9,6,3,5,1,-5,-3,-6];
 
-// Calculate averages
-const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+// Profit/ Loss calculation
+let trades = profitsData.filter(p => p !== 0); 
+let profitable = trades.filter(p => p > 0);
+let loss = trades.filter(p => p < 0);
+
+// Calculate average profit per trade
+let avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+let avgProfit = avg(profitable).toFixed(2);
+let avgLoss = avg(loss).toFixed(2);
+
+// Bar Chart 1: Avg Profit/Loss per Trade
+Plotly.newPlot('avgProfitLossChart', [{
+  x: ['Average Profit', 'Average Loss'],
+  y: [avgProfit, avgLoss],  // Show loss as a positive bar Math.abs(avgLoss)
+  type: 'bar',
+  marker: { color: ['#6FCF97', '#EB5757'] }
+}], {
+  title: 'Average Profit vs. Average Loss per Trade',
+  yaxis: { title: 'Profit/Loss ($)' }
+});
+
+// Bar Chart 2: Win vs. Loss Count
+Plotly.newPlot('winLossChart', [{
+  labels: ['Winning Trades', 'Losing Trades'],
+  values: [profitable.length, loss.length],
+  type: 'pie',
+  marker: {
+    colors: ['#6FCF97', '#EB5757'] // muted green and red colors
+  },
+  textinfo: 'percent',
+  textposition: 'inside',
+  insidetextorientation: 'radial'
+}], {
+  title: 'Win vs. Loss Distribution',
+});
+
+
+
 
 // let avgBullish;
 // if (bullishReturns.length > 0) {
@@ -649,32 +684,5 @@ const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
 //   avgBearish = 0;
 // }
 
-const avgBullish = bullishReturns.length ? avg(bullishReturns).toFixed(2) : 0;
-const avgBearish = bearishReturns.length ? avg(bearishReturns).toFixed(2) : 0;
-
-// Win/Loss classification
-const allReturns = bullishReturns.concat(bearishReturns);
-const wins = allReturns.filter(r => r > 0).length;
-const losses = allReturns.filter(r => r <= 0).length;
-
-// Bar Chart 1: Avg Return After Crossovers
-Plotly.newPlot('avgReturnChart', [{
-  x: ['Bullish Crossover', 'Bearish Crossover'],
-  y: [avgBullish, avgBearish],
-  type: 'bar',
-  marker: { color: ['green', 'red'] }
-}], {
-  title: 'Average Return After Crossovers',
-  yaxis: { title: 'Return (%)' }
-});
-
-// Bar Chart 2: Win vs. Loss Count
-Plotly.newPlot('winLossChart', [{
-  x: ['Winning Trades', 'Losing Trades'],
-  y: [wins, losses],
-  type: 'bar',
-  marker: { color: ['green', 'red'] }
-}], {
-  title: 'Win vs. Loss Count',
-  yaxis: { title: 'Number of Trades' }
-});
+// const avgBullish = bullishReturns.length ? avg(bullishReturns).toFixed(2) : 0;
+// const avgBearish = bearishReturns.length ? avg(bearishReturns).toFixed(2) : 0;
