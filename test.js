@@ -539,6 +539,31 @@ let list = [
   let ma8 = calculateMA(data, 8);
   let ma13 = calculateMA(data, 13);
   
+  // Lists for crossover points
+  let buyDates = [];
+  let buyPrices = [];
+  let sellDates = [];
+  let sellPrices = [];
+
+  for (let i = 1; i < prices.length; i++) {
+    if (ma5[i] && ma8[i] && ma13[i]) {
+    const isBullishNow = ma5[i] > ma8[i] && ma8[i] > ma13[i];
+    const wasBullishBefore = ma5[i - 1] > ma8[i - 1] && ma8[i - 1] > ma13[i - 1];
+
+    const isBearishNow = ma5[i] < ma8[i] && ma8[i] < ma13[i];
+    const wasBearishBefore = ma5[i - 1] < ma8[i - 1] && ma8[i - 1] < ma13[i - 1];
+
+      if (isBullishNow && !wasBullishBefore) {
+      buyDates.push(dates[i]);
+      buyPrices.push(prices[i]);
+      } else if (isBearishNow && !wasBearishBefore) {
+      sellDates.push(dates[i]);
+      sellPrices.push(prices[i]);
+      }
+    }
+  }
+
+
   // Plotly chart setup
   let traces = [
     {
@@ -568,8 +593,30 @@ let list = [
       name: '13-Day MA',
       mode: 'lines',
       line: { color: 'red' }
-    }
+    }  
   ];
+
+//Pushes buy and sell triangle markers to the line chart
+  traces.push(
+    {
+      x: buyDates,
+      y: buyPrices,
+      name: 'BUY Signal',
+      mode: 'markers+text',
+      marker: { color: 'green', size: 10, symbol: 'triangle-up' },
+      text: Array(buyDates.length).fill('BUY'),
+      textposition: 'top center'
+    },
+    {
+      x: sellDates,
+      y: sellPrices,
+      name: 'SELL Signal',
+      mode: 'markers+text',
+      marker: { color: 'red', size: 10, symbol: 'triangle-down' },
+      text: Array(sellDates.length).fill('SELL'),
+      textposition: 'bottom center'
+    }
+  );
   
   let layout = {
     title: 'EUR/USD with 5-8-13 Moving Averages',
@@ -580,3 +627,38 @@ let list = [
   // Render chart
   Plotly.newPlot('chart', traces, layout);
   
+  // Dummy buy/sell signals with calculated returns already
+const bullishReturns = [1.2, 0.8, -0.5, 2.1]; // % change from buy to sell
+const bearishReturns = [-0.7, 1.5, -0.3];     // % from short to cover
+
+// Calculate averages
+const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+const avgBullish = bullishReturns.length ? avg(bullishReturns).toFixed(2) : 0;
+const avgBearish = bearishReturns.length ? avg(bearishReturns).toFixed(2) : 0;
+
+// Win/Loss classification
+const allReturns = [...bullishReturns, ...bearishReturns];
+const wins = allReturns.filter(r => r > 0).length;
+const losses = allReturns.filter(r => r <= 0).length;
+
+// 📊 Bar Chart 1: Avg Return After Crossovers
+Plotly.newPlot('avgReturnChart', [{
+  x: ['Bullish Crossover', 'Bearish Crossover'],
+  y: [avgBullish, avgBearish],
+  type: 'bar',
+  marker: { color: ['green', 'red'] }
+}], {
+  title: 'Average Return After Crossovers',
+  yaxis: { title: 'Return (%)' }
+});
+
+// 📊 Bar Chart 2: Win vs. Loss Count
+Plotly.newPlot('winLossChart', [{
+  x: ['Winning Trades', 'Losing Trades'],
+  y: [wins, losses],
+  type: 'bar',
+  marker: { color: ['green', 'red'] }
+}], {
+  title: 'Win vs. Loss Count',
+  yaxis: { title: 'Number of Trades' }
+});
