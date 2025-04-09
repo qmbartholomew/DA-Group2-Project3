@@ -505,77 +505,249 @@ let list = [
     }
   ];
   
-  
-  // Format it to remove extra spaces and extract only what we need
-  let data = list.map(d => ({
-    date: d.Date,
-    price: d[" Close"]
-  }));
-  
-  // Sort by date (oldest to newest)
-  data.sort((a, b) => new Date(a.date) - new Date(b.date));
-  
-  // Moving Average calculator
-  function calculateMA(data, period) {
-    let ma = [];
-    for (let i = 0; i < data.length; i++) {
-      if (i < period - 1) {
-        ma.push(null);
-      } else {
-        let window = data.slice(i - period + 1, i + 1).map(d => d.price);
-        let avg = window.reduce((sum, val) => sum + val, 0) / period;
-        ma.push(avg);
-      }
+// Format it to remove extra spaces and extract only what we need
+let data = list.map(d => ({
+  date: d.Date,
+  price: d[" Close"]
+}));
+
+// Sort by date (oldest to newest)
+data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+// Moving Average calculator
+function calculateMA(data, period) {
+  let ma = [];
+  for (let i = 0; i < data.length; i++) {
+    if (i < period - 1) {
+      ma.push(null);
+    } else {
+      let window = data.slice(i - period + 1, i + 1).map(d => d.price);
+      let avg = window.reduce((sum, val) => sum + val, 0) / period;
+      ma.push(avg);
     }
-    return ma;
   }
-  
-  // Extract date and price arrays
-  let dates = data.map(d => d.date);
-  let prices = data.map(d => d.price);
-  
-  // Calculate 5, 8, 13-day MAs
-  let ma5 = calculateMA(data, 5);
-  let ma8 = calculateMA(data, 8);
-  let ma13 = calculateMA(data, 13);
-  
-  // Plotly chart setup
-  let traces = [
-    {
-      x: dates,
-      y: prices,
-      name: 'CAD/USD Price',
-      mode: 'lines+markers',
-      line: { color: 'black' }
-    },
-    {
-      x: dates,
-      y: ma5,
-      name: '5-Day MA',
-      mode: 'lines',
-      line: { color: 'blue' }
-    },
-    {
-      x: dates,
-      y: ma8,
-      name: '8-Day MA',
-      mode: 'lines',
-      line: { color: 'orange' }
-    },
-    {
-      x: dates,
-      y: ma13,
-      name: '13-Day MA',
-      mode: 'lines',
-      line: { color: 'red' }
+  return ma;
+}
+
+// Extract date and price arrays
+let dates = data.map(d => d.date);
+let prices = data.map(d => d.price);
+
+// Calculate 5, 8, 13-day MAs
+let ma5 = calculateMA(data, 5);
+let ma8 = calculateMA(data, 8);
+let ma13 = calculateMA(data, 13);
+
+// Lists for crossover points
+let buyDates = [];
+let buyPrices = [];
+let sellDates = [];
+let sellPrices = [];
+
+for (let i = 1; i < prices.length; i++) {
+  if (ma5[i] && ma8[i] && ma13[i]) {
+  const isBullishNow = ma5[i] > ma8[i] && ma8[i] > ma13[i];
+  const wasBullishBefore = ma5[i - 1] > ma8[i - 1] && ma8[i - 1] > ma13[i - 1];
+
+  const isBearishNow = ma5[i] < ma8[i] && ma8[i] < ma13[i];
+  const wasBearishBefore = ma5[i - 1] < ma8[i - 1] && ma8[i - 1] < ma13[i - 1];
+
+    if (isBullishNow && !wasBullishBefore) {
+    buyDates.push(dates[i]);
+    buyPrices.push(prices[i]);
+    } else if (isBearishNow && !wasBearishBefore) {
+    sellDates.push(dates[i]);
+    sellPrices.push(prices[i]);
     }
-  ];
+  }
+}
+
+
+// Plotly chart setup
+let traces = [
+  {
+    x: dates,
+    y: prices,
+    name: 'EUR/USD Price',
+    mode: 'lines+markers',
+    line: { color: 'black' }
+  },
+  {
+    x: dates,
+    y: ma5,
+    name: '5-Day MA',
+    mode: 'lines',
+    line: { color: 'blue' }
+  },
+  {
+    x: dates,
+    y: ma8,
+    name: '8-Day MA',
+    mode: 'lines',
+    line: { color: 'orange' }
+  },
+  {
+    x: dates,
+    y: ma13,
+    name: '13-Day MA',
+    mode: 'lines',
+    line: { color: 'red' }
+  }  
+];
+
+//Pushes buy and sell triangle markers to the line chart
+traces.push(
+  {
+    x: buyDates,
+    y: buyPrices,
+    name: 'BUY Signal',
+    mode: 'markers+text',
+    marker: { color: 'green', size: 10, symbol: 'triangle-up' },
+    text: Array(buyDates.length).fill('BUY'),
+    textposition: 'top center'
+  },
+  {
+    x: sellDates,
+    y: sellPrices,
+    name: 'SELL Signal',
+    mode: 'markers+text',
+    marker: { color: 'red', size: 10, symbol: 'triangle-down' },
+    text: Array(sellDates.length).fill('SELL'),
+    textposition: 'bottom center'
+  }
+);
+
+let layout = {
+  title: 'EUR/USD with 5-8-13 Moving Averages',
+  xaxis: { title: 'Date' },
+  yaxis: { title: 'Price' }
+};
+
+// Render chart
+Plotly.newPlot('chart', traces, layout);
+
+// Dummy buy/sell signals with calculated returns already
+const bullishReturns = [1.2, 0.8, -0.5, 2.1]; // % change from buy to sell
+const bearishReturns = [-0.7, 1.5, -0.3];     // % from short to cover
+
+// Calculate averages
+const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
+// let avgBullish;
+// if (bullishReturns.length > 0) {
+//   avgBullish = avg(bullishReturns).toFixed(2);
+// } else {
+//   avgBullish = 0;
+// }
+
+// let avgBearish;
+// if (bearishReturns.length > 0) {
+//   avgBearish = avg(bearishReturns).toFixed(2);
+// } else {
+//   avgBearish = 0;
+// }
+
+const avgBullish = bullishReturns.length ? avg(bullishReturns).toFixed(2) : 0;
+const avgBearish = bearishReturns.length ? avg(bearishReturns).toFixed(2) : 0;
+
+// Win/Loss classification
+const allReturns = bullishReturns.concat(bearishReturns);
+const wins = allReturns.filter(r => r > 0).length;
+const losses = allReturns.filter(r => r <= 0).length;
+
+// 📊 Bar Chart 1: Avg Return After Crossovers
+Plotly.newPlot('avgReturnChart', [{
+x: ['Bullish Crossover', 'Bearish Crossover'],
+y: [avgBullish, avgBearish],
+type: 'bar',
+marker: { color: ['green', 'red'] }
+}], {
+title: 'Average Return After Crossovers',
+yaxis: { title: 'Return (%)' }
+});
+
+// 📊 Bar Chart 2: Win vs. Loss Count
+Plotly.newPlot('winLossChart', [{
+x: ['Winning Trades', 'Losing Trades'],
+y: [wins, losses],
+type: 'bar',
+marker: { color: ['green', 'red'] }
+}], {
+title: 'Win vs. Loss Count',
+yaxis: { title: 'Number of Trades' }
+});
+
+ //ORIGINAL 
+  // // Format it to remove extra spaces and extract only what we need
+  // let data = list.map(d => ({
+  //   date: d.Date,
+  //   price: d[" Close"]
+  // }));
   
-  let layout = {
-    title: 'CAD/USD Moving Averages',
-    xaxis: { title: 'Date' },
-    yaxis: { title: 'Price' }
-  };
+  // // Sort by date (oldest to newest)
+  // data.sort((a, b) => new Date(a.date) - new Date(b.date));
   
-  // Render chart
-  Plotly.newPlot('chart', traces, layout);
+  // // Moving Average calculator
+  // function calculateMA(data, period) {
+  //   let ma = [];
+  //   for (let i = 0; i < data.length; i++) {
+  //     if (i < period - 1) {
+  //       ma.push(null);
+  //     } else {
+  //       let window = data.slice(i - period + 1, i + 1).map(d => d.price);
+  //       let avg = window.reduce((sum, val) => sum + val, 0) / period;
+  //       ma.push(avg);
+  //     }
+  //   }
+  //   return ma;
+  // }
+  
+  // // Extract date and price arrays
+  // let dates = data.map(d => d.date);
+  // let prices = data.map(d => d.price);
+  
+  // // Calculate 5, 8, 13-day MAs
+  // let ma5 = calculateMA(data, 5);
+  // let ma8 = calculateMA(data, 8);
+  // let ma13 = calculateMA(data, 13);
+  
+  // // Plotly chart setup
+  // let traces = [
+  //   {
+  //     x: dates,
+  //     y: prices,
+  //     name: 'CAD/USD Price',
+  //     mode: 'lines+markers',
+  //     line: { color: 'black' }
+  //   },
+  //   {
+  //     x: dates,
+  //     y: ma5,
+  //     name: '5-Day MA',
+  //     mode: 'lines',
+  //     line: { color: 'blue' }
+  //   },
+  //   {
+  //     x: dates,
+  //     y: ma8,
+  //     name: '8-Day MA',
+  //     mode: 'lines',
+  //     line: { color: 'orange' }
+  //   },
+  //   {
+  //     x: dates,
+  //     y: ma13,
+  //     name: '13-Day MA',
+  //     mode: 'lines',
+  //     line: { color: 'red' }
+  //   }
+  // ];
+  
+  // let layout = {
+  //   title: 'CAD/USD Moving Averages',
+  //   xaxis: { title: 'Date' },
+  //   yaxis: { title: 'Price' }
+  // };
+  
+  // // Render chart
+  // Plotly.newPlot('chart', traces, layout);

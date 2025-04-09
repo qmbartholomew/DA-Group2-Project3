@@ -2,9 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Foreign Currency Moving Averages</title>
+  <title>EUR/USD Chart with Moving Averages</title>
 
   <!-- Load Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Optional: Add some basic styling -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    #chart {
+      width: 1000px;
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>EUR/USD Chart with 5-8-13 Moving Averages</h2>
+
+  <!-- Chart will render inside this div -->
+  <div id="chart"></div>
+<!-- <div id="avgReturnChart" style="width:600px; height:400px;"></div>
+<div id="winLossChart" style="width:600px; height:400px;"></div> -->
+
+<div style="display: flex; gap: 20px;">
+  <div id="avgReturnChart" style="width:600px; height:400px;"></div>
+  <div id="winLossChart" style="width:600px; height:400px;"></div>
+</div>
+
+
+  <!-- Load your JavaScript file (make sure this matches your file structure) -->
+  <script src="test.js"></script>
+
+</body>
+</html>
+
+<!-- ORIGINAL -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Foreign Currency Moving Averages</title>
+
+  <-- Load Plotly.js -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <!-- Optional: Add some basic styling -->
