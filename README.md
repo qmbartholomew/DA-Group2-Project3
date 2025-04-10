@@ -38,6 +38,8 @@
     - Flask for serving the data from the SQLite database
     - Typescript/Angular for building the website's UI
 
+## Ethical Consideration
+We wouldn't say there was much ethical considerations needed since what we are analyzing doesn’t really affect any sort of ethics in a positive/negative way. We simply are analyzing the 5/8/13 trading strategy and whether it is a good strategy to utilize in mostly short term trading environments.
 ## Key Findings
 
 
