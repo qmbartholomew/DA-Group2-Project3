@@ -1,0 +1,10 @@
+* {
+    margin: auto;
+}
+.profitCharts {
+    width: 100%;
+    display: flex;
+}
+#chart {
+    width: 80%;
+}

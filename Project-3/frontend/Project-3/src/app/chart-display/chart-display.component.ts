@@ -18,8 +18,8 @@ export class ChartDisplayComponent {
   displayText: string = 'Please select a currency pair to view the chart.';
   currencyPairs = [
     { name: 'EUR/USD', val: 'EUR' },
-    { name: 'JPY/USD', val: 'JPY' },
-    { name: 'CAD/USD', val: 'CAD' }
+    { name: 'USD/JPY', val: 'JPY' },
+    { name: 'USD/CAD', val: 'CAD' }
   ];
 
   get selectedPair(): string {
@@ -30,56 +30,79 @@ export class ChartDisplayComponent {
     this._selectedPair = value;
     if (value) {
       this.displayText = '';
-      this.fetchAndRenderChart(value);
+      this.plotCharts(value);
     } else {
       this.displayText = 'Please select a currency pair to view the chart.';
     }
   }
+  
+  plotCharts(pair: any) {
+    fetch(`http://localhost:5000/${pair}`)
+      .then(response => response.json())
+      .then(data => {
+        let dates = data.map((d: any) => d.Date);
+        let prices = data.map((d: any) => d[" Close"]); 
+        let profitsData = data.map((d: any) => d.Profit).filter((p: any) => p !== null && p !== undefined);
 
-  fetchAndRenderChart(pair: string): void {
-    this.http.get<any[]>(`http://localhost:5000/${pair}`).subscribe({
-      next: (list) => {
-        let data = list.map(d => ({
-          date: d.Date,
-          price: d[" Close"]
-        }));
-
-        data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-        const calculateMA = (data: any, period: any) => {
-          return data.map((_: any, i: any) => {
+        const calculateMA = (priceArray: number[], period: number) => {
+          return priceArray.map((_, i) => {
             if (i < period - 1) return null;
-            const window = data.slice(i - period + 1, i + 1).map((d: { price: any; }) => d.price);
-            return window.reduce((sum: any, val: any) => sum + val, 0) / period;
+            const window = priceArray.slice(i - period + 1, i + 1);
+            return window.reduce((sum, val) => sum + val, 0) / period;
           });
         };
+  
+        let ma5 = calculateMA(prices, 5);
+        let ma8 = calculateMA(prices, 8);
+        let ma13 = calculateMA(prices, 13);
 
-        const dates = data.map(d => d.date);
-        const prices = data.map(d => d.price);
-        const ma5 = calculateMA(data, 5);
-        const ma8 = calculateMA(data, 8);
-        const ma13 = calculateMA(data, 13);
-
-        const traces = [
-          { x: dates, y: prices, name: `${pair} Price`, mode: 'lines+markers', line: { color: 'black' } },
+  
+        let traces = [
+          { x: dates, y: prices, name: `${pair.toUpperCase()} Price`, mode: 'lines+markers', line: { color: 'black' } },
           { x: dates, y: ma5, name: '5-Day MA', mode: 'lines', line: { color: 'blue' } },
           { x: dates, y: ma8, name: '8-Day MA', mode: 'lines', line: { color: 'orange' } },
           { x: dates, y: ma13, name: '13-Day MA', mode: 'lines', line: { color: 'red' } }
         ];
-
-        const layout: Partial<Plotly.Layout> = {
-          title: 'EUR/USD with 5-8-13 Moving Averages',
+  
+        let layout = {
+          title: `${pair.toUpperCase()} with 5-8-13 Moving Averages`,
           xaxis: { title: 'Date' },
           yaxis: { title: 'Price' },
           hovermode: 'x unified'
         };
+  
+        Plotly.newPlot('chart', traces as Partial<Plotly.Data>[], layout as Partial<Plotly.Layout>);
 
-        Plotly.newPlot('chart', traces, layout);
-      },
-      error: (err) => {
-        console.error('Error fetching chart data:', err);
-        this.displayText = 'Failed to load chart data.';
-      }
-    });
+        
+        let trades = profitsData.filter((p: number) => p !== 0);
+        let profitable = trades.filter((p: number) => p > 0);
+        let loss = trades.filter((p: number) => p < 0);
+        
+        let avg = (arr: any[]) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+        let avgProfit = avg(profitable).toFixed(2);
+        let avgLoss = avg(loss).toFixed(2);
+  
+        Plotly.newPlot('avgProfitLossChart', [{
+          x: ['Average Profit', 'Average Loss'],
+          y: [avgProfit, avgLoss],
+          type: 'bar',
+          marker: { color: ['#6FCF97', '#EB5757'] }
+        }], {
+          title: 'Average Profit vs. Average Loss per Trade',
+          yaxis: { title: 'Profit/Loss ($)' }
+        });
+  
+        Plotly.newPlot('winLossChart', [{
+          labels: ['Winning Trades', 'Losing Trades'],
+          values: [profitable.length, loss.length],
+          type: 'pie',
+          marker: { colors: ['#6FCF97', '#EB5757'] },
+          textinfo: 'percent',
+          textposition: 'inside',
+          insidetextorientation: 'radial'
+        }], {
+          title: 'Win vs. Loss Distribution'
+        });
+      });
   }
 }

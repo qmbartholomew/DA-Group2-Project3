@@ -1,4 +1,4 @@
-<div class="chart-container">
+<div class="chart-display">
   <div style="text-align: center;">
     <div class="controls">
       <label for="graphSelect">Select Graph:</label>
@@ -13,7 +13,11 @@
     <div *ngIf="displayText">
       <p>{{ displayText }}</p>
     </div>
-    
+
     <div id="chart" *ngIf="!displayText"></div>
+    <div class="profitCharts" *ngIf="!displayText">
+      <div id="avgProfitLossChart" *ngIf="!displayText"></div>
+      <div id="winLossChart" *ngIf="!displayText"></div>
+    </div>
 </div>
   
