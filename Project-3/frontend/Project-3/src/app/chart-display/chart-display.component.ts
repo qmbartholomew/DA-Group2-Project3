@@ -66,8 +66,8 @@ export class ChartDisplayComponent {
   
         let layout = {
           title: `${pair.toUpperCase()} with 5-8-13 Moving Averages`,
-          xaxis: { title: 'Date' },
-          yaxis: { title: 'Price' },
+          xaxis: { title: { text: 'Date' } },
+          yaxis: { title: { text: 'Price' } },
           hovermode: 'x unified'
         };
   
@@ -89,7 +89,8 @@ export class ChartDisplayComponent {
           marker: { color: ['#6FCF97', '#EB5757'] }
         }], {
           title: 'Average Profit vs. Average Loss per Trade',
-          yaxis: { title: 'Profit/Loss ($)' }
+          xaxis: { title: { text: 'Trade Type' } },             // optional but clear
+          yaxis: { title: { text: 'Profit/Loss ($)' } }
         });
   
         Plotly.newPlot('winLossChart', [{
