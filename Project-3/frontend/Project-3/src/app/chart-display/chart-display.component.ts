@@ -160,7 +160,7 @@ export class ChartDisplayComponent {
             xanchor: 'center'
           },
           height: 400,
-          width: 400,
+          width: 700,
           margin: { t: 60, b: 50, l: 0, r: 150 } // top margin gives room for the title
         });
       });
