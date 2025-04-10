@@ -48,6 +48,8 @@ We wouldn't say there was much ethical considerations needed since what we are a
 - Justin Wright
     - https://github.com/j-wright
 - Megan Iyer
+    - https://github.com/BookHaven12
 - Morgan Pfunder
+    - https://github.com/mopfun
 - Quentin Bartholomew
     - https://github.com/qmbartholomew
