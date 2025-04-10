@@ -14,10 +14,16 @@
       <p>{{ displayText }}</p>
     </div>
 
+    <h2 *ngIf="!displayText">{{selectedPair}} with 5-8-13 Moving Averages</h2>
     <div id="chart" *ngIf="!displayText"></div>
     <div class="profitCharts" *ngIf="!displayText">
-      <div id="avgProfitLossChart" *ngIf="!displayText"></div>
-      <div id="winLossChart" *ngIf="!displayText"></div>
+      <div>
+        <h2 *ngIf="!displayText">Average Profit vs. Average Loss per Trade</h2>
+        <div id="avgProfitLossChart" *ngIf="!displayText"></div>
+      </div>
+      <div>
+        <h2 *ngIf="!displayText">Win vs. Loss Distribution</h2>
+        <div id="winLossChart" style="width: 100%; height: 400px;"></div>
+      </div>
     </div>
 </div>
-  

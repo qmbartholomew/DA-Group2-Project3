@@ -101,7 +101,10 @@ export class ChartDisplayComponent {
           textposition: 'inside',
           insidetextorientation: 'radial'
         }], {
-          title: 'Win vs. Loss Distribution'
+          title: 'Win vs. Loss Distribution',
+          height: 400,
+          width: 400,
+          margin: { t: 50, b: 50, l: 50, r: 50 }
         });
       });
   }
