@@ -49,7 +49,8 @@ function calculateMA(data, period) {  //period = 5,8 or 13 days
         let avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
         let avgProfit = avg(profitable).toFixed(2);
         let avgLoss = avg(loss).toFixed(2);
-  
+        
+        //Bar Chart
         Plotly.newPlot('avgProfitLossChart', [{
           x: ['Average Profit', 'Average Loss'],
           y: [avgProfit, avgLoss],
@@ -59,7 +60,8 @@ function calculateMA(data, period) {  //period = 5,8 or 13 days
           title: 'Average Profit vs. Average Loss per Trade',
           yaxis: { title: 'Profit/Loss ($)' }
         });
-  
+        
+        // Pie Chart
         Plotly.newPlot('winLossChart', [{
           labels: ['Winning Trades', 'Losing Trades'],
           values: [profitable.length, loss.length],

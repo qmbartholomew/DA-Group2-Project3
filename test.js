@@ -629,30 +629,48 @@ let list = [
 
   /// BAR CHART CODE
   // FAKE DATA!!!!!!!
-let profitsData = [0, 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, -0.5, 0, 0,4,12,8,3,9,6,3,5,1,-5,-3,-6];
+let profitsData = [0, 0, 0, 1.2, 0, 0, 0, 0, 0, 0, 0, -0.5, 0, 0,.8,1.2,1.8,.93,1.7,.6,.3,.5,1,-.5,-.3,-.6];
 
 // Profit/ Loss calculation
 let trades = profitsData.filter(p => p !== 0); 
 let profitable = trades.filter(p => p > 0);
 let loss = trades.filter(p => p < 0);
 
-// Calculate average profit per trade
-let avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
-let avgProfit = avg(profitable).toFixed(2);
-let avgLoss = avg(loss).toFixed(2);
+// // Calculate average profit per trade
+// let avg = arr => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+// let avgProfit = avg(profitable).toFixed(2);
+// let avgLoss = avg(loss).toFixed(2);
 
-// Bar Chart 1: Avg Profit/Loss per Trade
+// // Total profit and total loss
+// let totalProfit = profitable.reduce((sum, val) => sum + val, 0).toFixed(4);
+// let totalLoss = loss.reduce((sum, val) => sum + val, 0).toFixed(4); 
+
+// // Bar Chart 1: Avg Profit/Loss per Trade
+// Plotly.newPlot('avgProfitLossChart', [{
+//   x: ['Average Profit', 'Average Loss'],
+//   y: [avgProfit, avgLoss],  
+//   type: 'bar',
+//   marker: { color: ['#6FCF97', '#EB5757'] }
+// }], {
+//   title: 'Average Profit vs. Average Loss per Trade',
+//   yaxis: { title: 'Profit/Loss ($)' }
+// });
+
+let totalProfit = trades.reduce((sum, val) => sum + val, 0).toFixed(4);
+
 Plotly.newPlot('avgProfitLossChart', [{
-  x: ['Average Profit', 'Average Loss'],
-  y: [avgProfit, avgLoss],  // Show loss as a positive bar Math.abs(avgLoss)
+  x: ['Total Profit/Loss'],
+  y: [(totalProfit)],
   type: 'bar',
-  marker: { color: ['#6FCF97', '#EB5757'] }
+  marker: { color: totalProfit >= 0 ? '#6FCF97' : '#EB5757' }, // green if positive, red if negative
+  text: [`${totalProfit}`],
+  textposition: 'auto'
 }], {
-  title: 'Average Profit vs. Average Loss per Trade',
-  yaxis: { title: 'Profit/Loss ($)' }
+  title: 'Final Profit/Loss',
+  yaxis: { title: 'Amount' }
 });
 
-// Bar Chart 2: Win vs. Loss Count
+// PIE Chart 2: Win vs. Loss Count
 Plotly.newPlot('winLossChart', [{
   labels: ['Winning Trades', 'Losing Trades'],
   values: [profitable.length, loss.length],
@@ -666,23 +684,3 @@ Plotly.newPlot('winLossChart', [{
 }], {
   title: 'Win vs. Loss Distribution',
 });
-
-
-
-
-// let avgBullish;
-// if (bullishReturns.length > 0) {
-//   avgBullish = avg(bullishReturns).toFixed(2);
-// } else {
-//   avgBullish = 0;
-// }
-
-// let avgBearish;
-// if (bearishReturns.length > 0) {
-//   avgBearish = avg(bearishReturns).toFixed(2);
-// } else {
-//   avgBearish = 0;
-// }
-
-// const avgBullish = bullishReturns.length ? avg(bullishReturns).toFixed(2) : 0;
-// const avgBearish = bearishReturns.length ? avg(bearishReturns).toFixed(2) : 0;
