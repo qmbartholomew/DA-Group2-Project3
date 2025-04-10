@@ -79,8 +79,8 @@ export class ChartDisplayComponent {
         let loss = trades.filter((p: number) => p < 0);
         
         let avg = (arr: any[]) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
-        let avgProfit = avg(profitable).toFixed(2);
-        let avgLoss = avg(loss).toFixed(2);
+        let avgProfit = avg(profitable).toFixed(4);
+        let avgLoss = avg(loss).toFixed(4);
   
         Plotly.newPlot('avgProfitLossChart', [{
           x: ['Average Profit', 'Average Loss'],
