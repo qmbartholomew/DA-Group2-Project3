@@ -39,7 +39,7 @@
     - Typescript/Angular for building the website's UI
 
 ## How to interact with the data:
-We’ve made it easy to interact with our dataset by providing a toggle feature that allows you to switch between the three foreign currencies we analyzed. This feature allows you to see the trend for each currency via the 5/8/13 strategy in the span of a year.
+We’ve made it easy to interact with our dataset by providing a toggle feature that allows you to switch between the three foreign currencies we analyzed. This feature allows you to see the trend for each currency via the 5/8/13 strategy in the span of a year. You are also able to zoom in ands pan over the sections of the data you would like to focus on with the icons in the upper right of the line chart.
 
 ## Ethical Consideration
 We wouldn't say there was much ethical considerations needed since what we are analyzing doesn’t really affect any sort of ethics in a positive/negative way. We simply are analyzing the 5/8/13 trading strategy and whether it is a good strategy to utilize in mostly short term trading environments.
