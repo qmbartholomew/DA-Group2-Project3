@@ -96,19 +96,52 @@ export class ChartDisplayComponent {
         //   yaxis: { title: { text: 'Profit/Loss ($)' } }
         // });
 
+        // Plotly.newPlot('avgProfitLossChart', [{
+        //   x: ['Total Profit/Loss'],
+        //   y: [(totalProfit)],
+        //   type: 'bar',
+        //   marker: { color: totalProfit >= 0 ? '#6FCF97' : '#EB5757' }, 
+        //   text: [`${totalProfit}`],
+        //   textposition: 'auto'
+        // }], {
+        //   title: 'Final Profit/Loss',
+        //   // xaxis: { title: { text: 'Trade Summary' } },
+        //   yaxis: { title: { text: 'Currency' }}
+        // });
+
         Plotly.newPlot('avgProfitLossChart', [{
           x: ['Total Profit/Loss'],
-          y: [(totalProfit)],
+          y: [totalProfit],
           type: 'bar',
-          marker: { color: totalProfit >= 0 ? '#6FCF97' : '#EB5757' }, 
+          marker: { color: totalProfit >= 0 ? '#6FCF97' : '#EB5757' },
           text: [`${totalProfit}`],
           textposition: 'auto'
         }], {
-          title: 'Final Profit/Loss',
-          // xaxis: { title: { text: 'Trade Summary' } },
-          yaxis: { title: { text: 'Currency' }}
+          title: {
+            text: '<b>Final Profit/Loss</b>',
+            font: { 
+              size: 24,
+              family: 'Times' },
+            xref: 'paper',
+            x: 0.5
+          },
+          yaxis: { title: { text: 'Currency' } }
         });
   
+        // Plotly.newPlot('winLossChart', [{
+        //   labels: ['Winning Trades', 'Losing Trades'],
+        //   values: [profitable.length, loss.length],
+        //   type: 'pie',
+        //   marker: { colors: ['#6FCF97', '#EB5757'] },
+        //   textinfo: 'percent',
+        //   textposition: 'inside',
+        //   insidetextorientation: 'radial'
+        // }], {
+        //   title: 'Win vs. Loss Distribution',
+        //   height: 400,
+        //   width: 400,
+        //   margin: { t: 50, b: 50, l: 50, r: 50 }
+        // });
         Plotly.newPlot('winLossChart', [{
           labels: ['Winning Trades', 'Losing Trades'],
           values: [profitable.length, loss.length],
@@ -118,10 +151,17 @@ export class ChartDisplayComponent {
           textposition: 'inside',
           insidetextorientation: 'radial'
         }], {
-          title: 'Win vs. Loss Distribution',
+          title: {
+            text: '<b>Win vs. Loss Distribution</b>',
+            font: { 
+              size: 24,
+              family: 'Times' },
+            x: 0.35,               // centers the title
+            xanchor: 'center'
+          },
           height: 400,
           width: 400,
-          margin: { t: 50, b: 50, l: 50, r: 50 }
+          margin: { t: 60, b: 50, l: 0, r: 150 } // top margin gives room for the title
         });
       });
   }
