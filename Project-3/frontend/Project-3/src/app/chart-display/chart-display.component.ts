@@ -142,6 +142,7 @@ export class ChartDisplayComponent {
         //   width: 400,
         //   margin: { t: 50, b: 50, l: 50, r: 50 }
         // });
+        
         Plotly.newPlot('winLossChart', [{
           labels: ['Winning Trades', 'Losing Trades'],
           values: [profitable.length, loss.length],
