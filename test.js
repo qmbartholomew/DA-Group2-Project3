@@ -667,7 +667,7 @@ Plotly.newPlot('avgProfitLossChart', [{
   textposition: 'auto'
 }], {
   title: 'Final Profit/Loss',
-  yaxis: { title: 'Amount' }
+  yaxis: { title: 'Amount ' }
 });
 
 // PIE Chart 2: Win vs. Loss Count
