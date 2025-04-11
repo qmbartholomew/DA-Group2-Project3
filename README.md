@@ -43,7 +43,6 @@ We’ve made it easy to interact with our dataset by providing a toggle feature 
 
 ## Ethical Consideration
 We wouldn't say there was much ethical considerations needed since what we are analyzing doesn’t really affect any sort of ethics in a positive/negative way. We simply are analyzing the 5/8/13 trading strategy and whether it is a good strategy to utilize in mostly short term trading environments.
-## Key Findings
 
 
 ## Created by

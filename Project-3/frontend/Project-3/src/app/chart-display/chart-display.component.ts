@@ -78,21 +78,71 @@ export class ChartDisplayComponent {
         let profitable = trades.filter((p: number) => p > 0);
         let loss = trades.filter((p: number) => p < 0);
         
-        let avg = (arr: any[]) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
-        let avgProfit = avg(profitable).toFixed(4);
-        let avgLoss = avg(loss).toFixed(4);
+        // let avg = (arr: any[]) => arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+        // let avgProfit = avg(profitable).toFixed(4);
+        // let avgLoss = avg(loss).toFixed(4);
+
+        let totalProfit = Number(trades.reduce((sum: number, val: number) => sum + val, 0).toFixed(4))
+        // will have to correct the currency with respect to the country(?)
   
+        // Plotly.newPlot('avgProfitLossChart', [{
+        //   x: ['Average Profit', 'Average Loss'],
+        //   y: [avgProfit, avgLoss],
+        //   type: 'bar',
+        //   marker: { color: ['#6FCF97', '#EB5757'] }
+        // }], {
+        //   title: 'Average Profit vs. Average Loss per Trade',
+        //   xaxis: { title: { text: 'Trade Type' } },             // optional but clear
+        //   yaxis: { title: { text: 'Profit/Loss ($)' } }
+        // });
+
+        // Plotly.newPlot('avgProfitLossChart', [{
+        //   x: ['Total Profit/Loss'],
+        //   y: [(totalProfit)],
+        //   type: 'bar',
+        //   marker: { color: totalProfit >= 0 ? '#6FCF97' : '#EB5757' }, 
+        //   text: [`${totalProfit}`],
+        //   textposition: 'auto'
+        // }], {
+        //   title: 'Final Profit/Loss',
+        //   // xaxis: { title: { text: 'Trade Summary' } },
+        //   yaxis: { title: { text: 'Currency' }}
+        // });
+
         Plotly.newPlot('avgProfitLossChart', [{
-          x: ['Average Profit', 'Average Loss'],
-          y: [avgProfit, avgLoss],
+          x: ['Total Profit/Loss'],
+          y: [totalProfit],
           type: 'bar',
-          marker: { color: ['#6FCF97', '#EB5757'] }
+          marker: { color: totalProfit >= 0 ? '#6FCF97' : '#EB5757' },
+          text: [`${totalProfit}`],
+          textposition: 'auto'
         }], {
-          title: 'Average Profit vs. Average Loss per Trade',
-          xaxis: { title: { text: 'Trade Type' } },             // optional but clear
-          yaxis: { title: { text: 'Profit/Loss ($)' } }
+          title: {
+            text: '<b>Final Profit/Loss</b>',
+            font: { 
+              size: 24,
+              family: 'Times' },
+            xref: 'paper',
+            x: 0.5
+          },
+          yaxis: { title: { text: this.selectedPair } }
         });
   
+        // Plotly.newPlot('winLossChart', [{
+        //   labels: ['Winning Trades', 'Losing Trades'],
+        //   values: [profitable.length, loss.length],
+        //   type: 'pie',
+        //   marker: { colors: ['#6FCF97', '#EB5757'] },
+        //   textinfo: 'percent',
+        //   textposition: 'inside',
+        //   insidetextorientation: 'radial'
+        // }], {
+        //   title: 'Win vs. Loss Distribution',
+        //   height: 400,
+        //   width: 400,
+        //   margin: { t: 50, b: 50, l: 50, r: 50 }
+        // });
+
         Plotly.newPlot('winLossChart', [{
           labels: ['Winning Trades', 'Losing Trades'],
           values: [profitable.length, loss.length],
@@ -102,10 +152,17 @@ export class ChartDisplayComponent {
           textposition: 'inside',
           insidetextorientation: 'radial'
         }], {
-          title: 'Win vs. Loss Distribution',
+          title: {
+            text: '<b>Win vs. Loss Distribution</b>',
+            font: { 
+              size: 24,
+              family: 'Times' },
+            x: 0.35,               // centers the title
+            xanchor: 'center'
+          },
           height: 400,
-          width: 400,
-          margin: { t: 50, b: 50, l: 50, r: 50 }
+          width: 700,
+          margin: { t: 60, b: 50, l: 0, r: 150 } // top margin gives room for the title
         });
       });
   }
